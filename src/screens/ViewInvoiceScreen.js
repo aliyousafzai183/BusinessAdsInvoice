@@ -50,6 +50,7 @@ const ViewInvoice = ({ route }) => {
           value={from}
           onChangeText={setFrom}
           placeholder='Your name or organization'
+          placeholderTextColor={theme.colors.text}
         />
       </View>
       <View style={styles.inputGroup}>
@@ -59,6 +60,7 @@ const ViewInvoice = ({ route }) => {
           value={to}
           onChangeText={setTo}
           placeholder='Recipient name or organization'
+          placeholderTextColor={theme.colors.text}
         />
       </View>
       <View style={styles.inputGroup}>
@@ -68,6 +70,7 @@ const ViewInvoice = ({ route }) => {
           value={number}
           onChangeText={setNumber}
           placeholder='Recipient mobile number'
+          placeholderTextColor={theme.colors.text}
           keyboardType='numeric'
         />
       </View>
@@ -78,6 +81,7 @@ const ViewInvoice = ({ route }) => {
           value={title}
           onChangeText={setTitle}
           placeholder='Invoice title'
+          placeholderTextColor={theme.colors.text}
         />
       </View>
       <View style={styles.inputGroup}>
@@ -87,6 +91,7 @@ const ViewInvoice = ({ route }) => {
           value={cost}
           onChangeText={setCost}
           placeholder='Total cost before discount'
+          placeholderTextColor={theme.colors.text}
           keyboardType='numeric'
         />
       </View>
@@ -97,6 +102,7 @@ const ViewInvoice = ({ route }) => {
           value={discount}
           onChangeText={handleDiscountChange}
           placeholder='Discount amount'
+          placeholderTextColor={theme.colors.text}
           keyboardType='numeric'
         />
       </View>
@@ -154,7 +160,8 @@ const styles = StyleSheet.create({
     width:'65%',
     textAlign:'left',
     borderColor:theme.colors.secondary,
-    borderWidth:1
+    borderWidth:1,
+    color:theme.colors.text
   },
 
   input: {
@@ -165,6 +172,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     fontSize: 16,
     width:'65%',
+    color:theme.colors.text
   },
 
   saveButton: {

@@ -43,6 +43,7 @@ const AddInvoice = () => {
           value={from}
           onChangeText={setFrom}
           placeholder='Your name or organization'
+          placeholderTextColor={theme.colors.text}
         />
       </View>
       <View style={styles.inputGroup}>
@@ -52,6 +53,7 @@ const AddInvoice = () => {
           value={to}
           onChangeText={setTo}
           placeholder='Recipient name or organization'
+          placeholderTextColor={theme.colors.text}
         />
       </View>
       <View style={styles.inputGroup}>
@@ -61,6 +63,7 @@ const AddInvoice = () => {
           value={number}
           onChangeText={setNumber}
           placeholder='Recipient mobile number'
+          placeholderTextColor={theme.colors.text}
           keyboardType='numeric'
         />
       </View>
@@ -71,6 +74,7 @@ const AddInvoice = () => {
           value={title}
           onChangeText={setTitle}
           placeholder='Invoice title'
+          placeholderTextColor={theme.colors.text}
         />
       </View>
       <View style={styles.inputGroup}>
@@ -80,6 +84,7 @@ const AddInvoice = () => {
           value={cost}
           onChangeText={setCost}
           placeholder='Total cost before discount'
+          placeholderTextColor={theme.colors.text}
           keyboardType='numeric'
         />
       </View>
@@ -90,6 +95,7 @@ const AddInvoice = () => {
           value={discount}
           onChangeText={handleDiscountChange}
           placeholder='Discount amount'
+          placeholderTextColor={theme.colors.text}
           keyboardType='numeric'
         />
       </View>
@@ -99,6 +105,7 @@ const AddInvoice = () => {
           style={styles.input}
           value={totalCost}
           placeholder='Total cost after discount'
+          placeholderTextColor={theme.colors.text}
           keyboardType='numeric'
           editable={false} // disable editing
         />
@@ -147,6 +154,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     fontSize: 16,
     width:'65%',
+    color:theme.colors.text
   },
 
   saveButton: {

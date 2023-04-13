@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
+    color:theme.colors.text
   },
   date: {
     fontSize: 12,
@@ -67,10 +68,14 @@ const styles = StyleSheet.create({
   },
   invoice: {
     fontSize: 14,
+    color:theme.colors.text
+
   },
   price: {
     fontSize: 16,
     fontWeight: 'bold',
+    color:theme.colors.text
+
   },
 });
 

@@ -25,10 +25,6 @@ const InvoiceList = ({ navigation }) => {
     setSearchText(text);
   }
 
-  const addNewInvoice = () => {
-    navigation.navigate('Add')
-  }
-
   const keyExtractor = (item) => item.id;
 
   const renderItem = ({ item }) => {
@@ -50,6 +46,7 @@ const InvoiceList = ({ navigation }) => {
       <TextInput
         value={searchText}
         placeholder='Search by name'
+        placeholderTextColor={theme.colors.headerText}
         style={styles.search}
         onChangeText={handleSearch}
       />
@@ -81,6 +78,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     backgroundColor: theme.colors.secondary,
     borderRadius: 20,
+    color:theme.colors.headerText,
     marginBottom: '3%',
     shadowColor: '#000',
     shadowOffset: {
