@@ -24,7 +24,7 @@ const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerHeader}>
-        <Image source={{ uri: 'https://images.pexels.com/photos/6289029/pexels-photo-6289029.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }} style={styles.drawerImage} />
+        <Image source={require('./src/images/drawerImage.jpg')} style={styles.drawerImage} />
       </View>
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
@@ -49,7 +49,11 @@ const Main = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen name="All Invoices" component={InvoiceList} />
-      <Drawer.Screen name="Invite" component={InviteScreen} />
+      <Drawer.Screen
+        name="Invite"
+        component={InviteScreen}
+        options={{ headerTitle: 'Invite Friends' }}
+      />
     </Drawer.Navigator>
   )
 }
@@ -84,14 +88,14 @@ const App = () => {
             headerTitle: 'Update Invoice',
             headerRight: () => (
               <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity onPress={() => { /* handle delete icon press */ }}>
-                  <Entypo name='trash' size={24} color='white' style={{ marginRight: 16 }} />
+                <TouchableOpacity onPress={() => { /* handle printer icon press */ }}>
+                  <FontAwesome name='print' size={24} color='white' style={{ marginRight: 16 }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { /* handle pdf icon press */ }}>
                   <FontAwesome name='file-pdf-o' size={24} color='white' style={{ marginRight: 16 }} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { /* handle printer icon press */ }}>
-                  <FontAwesome name='print' size={24} color='white' />
+                <TouchableOpacity onPress={() => { /* handle delete icon press */ }}>
+                  <Entypo name='trash' size={24} color='white' />
                 </TouchableOpacity>
               </View>
             )

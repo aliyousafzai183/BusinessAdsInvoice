@@ -1,7 +1,7 @@
 const theme = {
     colors: {
-        primary: 'red',
-        secondary: '#edb9bc',
+        primary: '#004AAD',
+        secondary: '#a6c4ed',
         background: '#ffffff',
         text: 'black',
         headerText: 'white',
