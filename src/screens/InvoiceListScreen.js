@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: '2%'
-  },
+  }, 
 
   search: {
     paddingHorizontal: 25,
