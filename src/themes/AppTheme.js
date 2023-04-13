@@ -1,9 +1,11 @@
-const Theme = {
+const theme = {
     colors: {
-        primary: '#007aff',
-        secondary: '#ff2d55',
-        background: '#f8f8f8',
-        text: '#333333',
+        primary: 'red',
+        secondary: '#edb9bc',
+        background: '#ffffff',
+        text: 'black',
+        headerText: 'white',
+        dateColor: 'gray'
     },
     fontSizes: {
         small: 12,
@@ -13,4 +15,4 @@ const Theme = {
     // other theme properties
 };
 
-export default Theme;
+export default theme;

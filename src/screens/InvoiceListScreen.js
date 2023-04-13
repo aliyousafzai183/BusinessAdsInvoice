@@ -1,19 +1,127 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
-  Button
+  TextInput,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity
 } from 'react-native';
 
-const InvoiceList = ({navigation}) => {
-  
+// theme
+import theme from '../themes/AppTheme';
+
+// component
+import InvoiceComponent from '../components/InvoiceComponent';
+
+// data
+import data from '../model/db';
+
+const InvoiceList = ({ navigation }) => {
+
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+  }
+
+  const addNewInvoice = () => {
+    navigation.navigate('Add')
+  }
+
+  const keyExtractor = (item) => item.id;
+
+  const renderItem = ({ item }) => {
+      return (
+        <InvoiceComponent data={item} navigation={navigation}/>
+      )
+  }
+
+  const filteredData = data.filter((item) => {
+    return item.title.toLowerCase().includes(searchText.toLowerCase());
+  });
+
+  const handleNewInvoice = () => {
+    navigation.navigate('Add');
+  }
+
   return (
-    <View style={{ flex: 1 }}>
-      <Text style={{ color: 'black'}}>List Invoice Screen</Text>
-      <Button title='View Invoice' onPress={()=>navigation.navigate('View')}/>
-      <Button title='Add Invoice' onPress={()=>navigation.navigate('Add')}/>
+    <View style={styles.container}>
+      <TextInput
+        value={searchText}
+        placeholder='Search by name'
+        style={styles.search}
+        onChangeText={handleSearch}
+      />
+
+      <FlatList
+        data={filteredData}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        style={styles.list}
+      />
+
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={handleNewInvoice}
+      >
+        <Text style={styles.addButtonText}>+</Text>
+      </TouchableOpacity>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    margin: '2%'
+  },
+
+  search: {
+    paddingHorizontal: 25,
+    backgroundColor: theme.colors.secondary,
+    borderRadius: 20,
+    marginBottom: '3%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+  list: {
+    marginBottom: 60 // Adjust the bottom margin to make space for the button
+  },
+
+  addButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 50,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+  addButtonText: {
+    color: theme.colors.textLight,
+    fontSize: 30,
+    fontWeight: 'bold',
+    color:theme.colors.headerText
+  }
+})
 
 export default InvoiceList;
