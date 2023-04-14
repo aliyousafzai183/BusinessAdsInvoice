@@ -9,10 +9,13 @@ import {
 // theme
 import theme from '../themes/AppTheme';
 
+// redux
+import { connect } from 'react-redux';
 
-const InvoiceComponent = ({ data, navigation }) => {
+const InvoiceComponent = ({ data, navigation, changeId }) => {
 
   const handlePress = () => {
+    changeId(data.id);
     navigation.navigate('View', {
       id: data.id,
       title: data.title,
@@ -43,7 +46,13 @@ const InvoiceComponent = ({ data, navigation }) => {
     </TouchableOpacity>
   )
 
-}
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeId: (newId) => dispatch({ type: 'SET_ID', payload: { id: newId } }),
+  };
+};
 
 const styles = StyleSheet.create({
   card: {
@@ -90,4 +99,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default InvoiceComponent;
+export default connect(null, mapDispatchToProps)(InvoiceComponent);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import {
   Text,
   View,
@@ -49,23 +49,6 @@ const ViewInvoice = ({ route, navigation }) => {
       );
     });
   }
-
-  const handleDelete = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        'DELETE FROM invoices where id=?',
-        [route.params.id],
-        (tx, results) => {
-          console.log('Results', results.rowsAffected);
-          if (results.rowsAffected > 0) {
-            navigation.navigate('Main');
-          } else {
-            alert('Please insert a valid User Id');
-          }
-        }
-      );
-    });
-  };
 
   return (
     <View style={styles.container}>
@@ -149,7 +132,8 @@ const ViewInvoice = ({ route, navigation }) => {
       </TouchableOpacity>
     </View>
   )
-}
+};
+
 
 const styles = StyleSheet.create({
   container: {
