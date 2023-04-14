@@ -28,7 +28,7 @@ var db = openDatabase({ name: 'UserDatabase.db' });
 import { connect } from 'react-redux';
 
 // controllers
-import {handleDelete, handlePrint, handleExportPdf} from '../controller/controller';
+import {handleDelete} from '../controller/controller';
 
 const CustomDrawerContent = (props) => {
   return (
@@ -132,10 +132,10 @@ const Root = ({id}) => {
             headerTitle: 'Update Invoice',
             headerRight: () => (
               <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity onPress={() => { handlePrint(id) }}>
+                <TouchableOpacity>
                   <FontAwesome name='print' size={24} color='white' style={{ marginRight: 16 }} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { handleExportPdf(id) }}>
+                <TouchableOpacity>
                   <FontAwesome name='file-pdf-o' size={24} color='white' style={{ marginRight: 16 }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { handleDelete(id) }}>

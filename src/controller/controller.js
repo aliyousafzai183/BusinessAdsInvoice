@@ -2,19 +2,6 @@
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'UserDatabase.db' });
 
-console.log("In controller");
-
-const handlePrint = (id) => {
-    console.log('Print button pressed');
-    // code to print invoice
-  };
-
-  const handleExportPdf = (id) => {
-    console.log('Export PDF button pressed');
-    // code to export invoice as PDF
-    console.log(id);
-  };
-
   const handleDelete = ({id}) => {
     console.log(id);
     db.transaction((tx) => {
@@ -33,4 +20,4 @@ const handlePrint = (id) => {
     });
   }; 
 
-  export {handleDelete, handleExportPdf, handlePrint};
+  export {handleDelete};
