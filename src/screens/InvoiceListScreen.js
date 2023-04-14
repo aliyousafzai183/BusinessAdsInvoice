@@ -17,6 +17,11 @@ import InvoiceComponent from '../components/InvoiceComponent';
 // data
 import data from '../model/db';
 
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+
+
+// function
 const InvoiceList = ({ navigation }) => {
 
   const [searchText, setSearchText] = useState('');
@@ -63,7 +68,7 @@ const InvoiceList = ({ navigation }) => {
         style={styles.addButton}
         onPress={handleNewInvoice}
       >
-        <Text style={styles.addButtonText}>+</Text>
+        <Feather name="plus" size={30} color={theme.colors.background}/>
       </TouchableOpacity>
     </View>
   )
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
   },
 
   list: {
-    marginBottom: 60 // Adjust the bottom margin to make space for the button
+    marginBottom: 60
   },
 
   addButton: {
@@ -116,10 +121,8 @@ const styles = StyleSheet.create({
   },
 
   addButtonText: {
-    color: theme.colors.textLight,
     fontSize: 30,
     fontWeight: 'bold',
-    color:theme.colors.headerText
   }
 })
 
