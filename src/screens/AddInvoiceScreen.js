@@ -4,20 +4,23 @@ import {
   View,
   TextInput,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 
 // theme
 import theme from '../themes/AppTheme';
 
-const AddInvoice = () => {
+const AddInvoice = ({ navigation }) => {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
-  const [number, setNumber ] = useState('');
+  const [number, setNumber] = useState('');
   const [title, setTitle] = useState('');
   const [cost, setCost] = useState('');
   const [discount, setDiscount] = useState('');
   const [totalCost, setTotalCost] = useState('');
+  const [date, setDate] = useState();
+
 
   const calculateTotalCost = (cost, discount) => {
     const total = cost - discount;
@@ -30,14 +33,40 @@ const AddInvoice = () => {
     setTotalCost(total);
   }
 
-  const handleSave = () => {
-    // Save logic here
+  const getFormattedDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+
+    return `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month}-${year}`;
   }
+
+  const handleSave = () => {
+    if (!from || !to || !title || !cost || !discount) {
+      Alert.alert(
+        'Missing Fields',
+        'Please fill all required fields.',
+        [{ text: 'OK', style: 'cancel' }],
+        { cancelable: true }
+      );
+      return;
+    }
+    setDate(getFormattedDate);
+    setTitle('');
+    setTo('');
+    setCost('');
+    setFrom('');
+    setDiscount('');
+    setNumber('');
+    setTotalCost('');
+    navigation.navigate('Main');
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>From</Text>
+        <Text style={styles.inputGroupHeader}>From *</Text>
         <TextInput
           style={styles.input}
           value={from}
@@ -47,12 +76,12 @@ const AddInvoice = () => {
         />
       </View>
       <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>To</Text>
+        <Text style={styles.inputGroupHeader}>To *</Text>
         <TextInput
           style={styles.input}
           value={to}
           onChangeText={setTo}
-          placeholder='Recipient name or organization'
+          placeholder='Recipient name'
           placeholderTextColor={theme.colors.text}
         />
       </View>
@@ -68,7 +97,7 @@ const AddInvoice = () => {
         />
       </View>
       <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Title</Text>
+        <Text style={styles.inputGroupHeader}>Title *</Text>
         <TextInput
           style={styles.input}
           value={title}
@@ -78,7 +107,7 @@ const AddInvoice = () => {
         />
       </View>
       <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Cost</Text>
+        <Text style={styles.inputGroupHeader}>Cost *</Text>
         <TextInput
           style={styles.input}
           value={cost}
@@ -89,7 +118,7 @@ const AddInvoice = () => {
         />
       </View>
       <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Discount</Text>
+        <Text style={styles.inputGroupHeader}>Discount *</Text>
         <TextInput
           style={styles.input}
           value={discount}
@@ -123,16 +152,16 @@ const AddInvoice = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal:20,
-    paddingVertical:10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     backgroundColor: '#fff',
   },
 
   inputGroup: {
     marginBottom: 10,
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 
   inputGroupHeader: {
@@ -142,8 +171,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     borderRadius: 5,
-    width:'30%',
-    textAlign:'center'
+    width: '30%',
+    textAlign: 'center',
+    color: theme.colors.headerText
   },
 
   input: {
@@ -153,8 +183,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
     fontSize: 16,
-    width:'65%',
-    color:theme.colors.text
+    width: '65%',
+    color: theme.colors.text
   },
 
   saveButton: {

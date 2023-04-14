@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -20,6 +20,7 @@ import data from '../model/db';
 const InvoiceList = ({ navigation }) => {
 
   const [searchText, setSearchText] = useState('');
+  const [invoices, setInvoices] = useState(data);
 
   const handleSearch = (text) => {
     setSearchText(text);

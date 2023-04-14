@@ -148,7 +148,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     borderRadius: 5,
     width:'30%',
-    textAlign:'center'
+    textAlign:'center',
+    color:theme.colors.headerText
   },
 
   inputGroupNext: {
