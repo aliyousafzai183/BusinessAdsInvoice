@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text,
   View,
   TextInput,
   StyleSheet,
   FlatList,
   TouchableOpacity
 } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+
 
 // theme
 import theme from '../themes/AppTheme';
@@ -15,7 +16,8 @@ import theme from '../themes/AppTheme';
 import InvoiceComponent from '../components/InvoiceComponent';
 
 // data
-import data from '../model/db';
+import { openDatabase } from 'react-native-sqlite-storage';
+var db = openDatabase({ name: 'UserDatabase.db' });
 
 // icons
 import Feather from 'react-native-vector-icons/Feather';
@@ -23,23 +25,48 @@ import Feather from 'react-native-vector-icons/Feather';
 
 // function
 const InvoiceList = ({ navigation }) => {
+  const isFocused = useIsFocused();
 
   const [searchText, setSearchText] = useState('');
-  const [invoices, setInvoices] = useState(data);
+  const [invoices, setInvoices] = useState([]);
+
+  useEffect(() => {
+    const fetchInvoices = () => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          'SELECT * FROM invoices',
+          [],
+          (tx, results) => {
+            var temp = [];
+            for (let i = 0; i < results.rows.length; ++i)
+              temp.push(results.rows.item(i));
+            setInvoices(temp);
+          }
+        );
+      });
+    };
+  
+    fetchInvoices();
+  
+    const reloadInvoices = navigation.addListener('focus', fetchInvoices);
+    return reloadInvoices;
+  }, [invoices, isFocused]);
+     
 
   const handleSearch = (text) => {
     setSearchText(text);
   }
 
+  // used by FlatList
   const keyExtractor = (item) => item.id;
 
   const renderItem = ({ item }) => {
-      return (
-        <InvoiceComponent data={item} navigation={navigation}/>
-      )
+    return (
+      <InvoiceComponent data={item} navigation={navigation} />
+    )
   }
 
-  const filteredData = data.filter((item) => {
+  const filteredData = invoices.filter((item) => {
     return item.title.toLowerCase().includes(searchText.toLowerCase());
   });
 
@@ -68,7 +95,7 @@ const InvoiceList = ({ navigation }) => {
         style={styles.addButton}
         onPress={handleNewInvoice}
       >
-        <Feather name="plus" size={30} color={theme.colors.background}/>
+        <Feather name="plus" size={30} color={theme.colors.background} />
       </TouchableOpacity>
     </View>
   )
@@ -78,13 +105,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: '2%'
-  }, 
+  },
 
   search: {
     paddingHorizontal: 25,
     backgroundColor: theme.colors.secondary,
     borderRadius: 20,
-    color:theme.colors.headerText,
+    color: theme.colors.headerText,
     marginBottom: '3%',
     shadowColor: '#000',
     shadowOffset: {

@@ -1,45 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
   TextInput,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 
 // theme
 import theme from '../themes/AppTheme';
 
 // data
-import data from '../model/db';
+import { openDatabase } from 'react-native-sqlite-storage';
+var db = openDatabase({ name: 'UserDatabase.db' });
 
-const ViewInvoice = ({ route }) => {
-  const { id } = route.params;
-  const invoice = data.find(item => item.id === id);
+const ViewInvoice = ({ route, navigation }) => {
 
-  const [from, setFrom] = useState(invoice.from);
-  const [to, setTo] = useState(invoice.to);
-  const [number, setNumber ] = useState(invoice.mobile);
-  const [title, setTitle] = useState(invoice.title);
-  const [cost, setCost] = useState(invoice.costbeforediscount);
-  const [discount, setDiscount] = useState(invoice.discount);
-  const [totalCost, setTotalCost] = useState(invoice.cost);
-
+  const [from, setFrom] = useState(route.params.fromPerson);
+  const [to, setTo] = useState(route.params.toPerson);
+  const [cost, setCost] = useState(route.params.cost);
+  const [discount, setDiscount] = useState(route.params.discount);
+  const [totalCost, setTotalCost] = useState(route.params.totalCost);
+  const [number, setNumber] = useState(route.params.number ? route.params.number : "No Mobile Number");
+  const [title, setTitle] = useState(route.params.title);
 
   const calculateTotalCost = (cost, discount) => {
     const total = cost - discount;
     return total.toFixed(2); // limit to 2 decimal places
-  }
+  };
 
   const handleDiscountChange = (value) => {
     const total = calculateTotalCost(cost, value);
     setDiscount(value);
     setTotalCost(total);
-  }
+  };
 
   const handleUpdate = () => {
-    // Save logic here
+    db.transaction((tx) => {
+      tx.executeSql(
+        'UPDATE invoices SET fromPerson=?, toPerson=?, number=?, title=?, cost=?, discount=?, totalCost=? WHERE id=?',
+        [from, to, number, title, cost, discount, totalCost, route.params.id],
+        (tx, results) => {
+          console.log('Results', results.rowsAffected);
+          if (results.rowsAffected > 0) {
+            navigation.navigate('Main');
+          } else alert('Updation Failed');
+        }
+      );
+    });
   }
+
+  const handleDelete = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'DELETE FROM invoices where id=?',
+        [route.params.id],
+        (tx, results) => {
+          console.log('Results', results.rowsAffected);
+          if (results.rowsAffected > 0) {
+            navigation.navigate('Main');
+          } else {
+            alert('Please insert a valid User Id');
+          }
+        }
+      );
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -88,7 +114,7 @@ const ViewInvoice = ({ route }) => {
         <Text style={styles.inputGroupHeader}>Cost</Text>
         <TextInput
           style={styles.input}
-          value={cost}
+          value={cost.toString()}
           onChangeText={setCost}
           placeholder='Total cost before discount'
           placeholderTextColor={theme.colors.text}
@@ -99,7 +125,7 @@ const ViewInvoice = ({ route }) => {
         <Text style={styles.inputGroupHeader}>Discount</Text>
         <TextInput
           style={styles.input}
-          value={discount}
+          value={discount.toString()}
           onChangeText={handleDiscountChange}
           placeholder='Discount amount'
           placeholderTextColor={theme.colors.text}
@@ -113,7 +139,7 @@ const ViewInvoice = ({ route }) => {
       </View>
       <View style={styles.inputGroup}>
         <Text style={styles.inputGroupHeader}>Date</Text>
-        <Text style={styles.inputGroupNext}> {invoice.date} </Text>
+        <Text style={styles.inputGroupNext}> {route.params.date} </Text>
       </View>
       <TouchableOpacity
         style={styles.saveButton}
@@ -128,16 +154,16 @@ const ViewInvoice = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal:20,
-    paddingVertical:10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     backgroundColor: '#fff',
   },
 
   inputGroup: {
     marginBottom: 10,
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 
   inputGroupHeader: {
@@ -147,9 +173,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     borderRadius: 5,
-    width:'30%',
-    textAlign:'center',
-    color:theme.colors.headerText
+    width: '30%',
+    textAlign: 'center',
+    color: theme.colors.headerText
   },
 
   inputGroupNext: {
@@ -158,11 +184,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     borderRadius: 5,
-    width:'65%',
-    textAlign:'left',
-    borderColor:theme.colors.secondary,
-    borderWidth:1,
-    color:theme.colors.text
+    width: '65%',
+    textAlign: 'left',
+    borderColor: theme.colors.secondary,
+    borderWidth: 1,
+    color: theme.colors.text
   },
 
   input: {
@@ -172,8 +198,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
     fontSize: 16,
-    width:'65%',
-    color:theme.colors.text
+    width: '65%',
+    color: theme.colors.text
   },
 
   saveButton: {

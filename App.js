@@ -20,6 +20,10 @@ import theme from './src/themes/AppTheme';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 
+// db
+import { openDatabase } from 'react-native-sqlite-storage';
+var db = openDatabase({ name: 'UserDatabase.db' });
+
 const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
@@ -60,6 +64,37 @@ const Main = () => {
 
 const Stack = createNativeStackNavigator();
 const App = () => {
+
+  useEffect(() => {
+    db.transaction(function (txn) {
+      txn.executeSql(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='table_user'",
+        [],
+        function (tx, res) {
+          console.log('item:', res.rows.length);
+          if (res.rows.length == 0) {
+            tx.executeSql(
+              `CREATE TABLE IF NOT EXISTS invoices (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  fromPerson TEXT NOT NULL,
+                  toPerson TEXT NOT NULL,
+                  number TEXT,
+                  title TEXT NOT NULL,
+                  cost REAL NOT NULL,
+                  discount REAL NOT NULL,
+                  totalCost REAL NOT NULL,
+                  date TEXT NOT NULL
+                )`,
+              [],
+              () => console.log('Table created successfully.'),
+              error => console.log(error)
+          );
+          }
+        }
+      );
+    });
+  }, []);
+
   return (
     <NavigationContainer>
 

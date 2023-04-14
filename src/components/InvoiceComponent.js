@@ -13,7 +13,17 @@ import theme from '../themes/AppTheme';
 const InvoiceComponent = ({ data, navigation }) => {
 
   const handlePress = () => {
-    navigation.navigate('View', { id: data.id });
+    navigation.navigate('View', {
+      id: data.id,
+      title: data.title,
+      toPerson: data.toPerson,
+      fromPerson: data.fromPerson,
+      cost: data.cost,
+      discount: data.discount,
+      totalCost: data.totalCost,
+      number: data.number,
+      date: data.date
+    });
   }
 
 
@@ -27,7 +37,7 @@ const InvoiceComponent = ({ data, navigation }) => {
         <Text style={styles.date}>{data.date}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.invoice}>{data.invoiceNo}</Text>
+        <Text style={styles.invoice}>INV00{data.id}</Text>
         <Text style={styles.price}>$ {data.cost}</Text>
       </View>
     </TouchableOpacity>
@@ -60,7 +70,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
-    color:theme.colors.text
+    color: theme.colors.text
   },
   date: {
     fontSize: 12,
@@ -68,13 +78,13 @@ const styles = StyleSheet.create({
   },
   invoice: {
     fontSize: 14,
-    color:theme.colors.text
+    color: theme.colors.text
 
   },
   price: {
     fontSize: 16,
     fontWeight: 'bold',
-    color:theme.colors.text
+    color: theme.colors.text
 
   },
 });

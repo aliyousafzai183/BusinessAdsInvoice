@@ -8,12 +8,18 @@ import {
   Alert
 } from 'react-native';
 
+// db
+// import db from '../model/openDb';
+import { openDatabase } from 'react-native-sqlite-storage';
+
+var db = openDatabase({ name: 'UserDatabase.db' });
+
 // theme
 import theme from '../themes/AppTheme';
 
 const AddInvoice = ({ navigation }) => {
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
+  const [fromPerson, setFrom] = useState('');
+  const [toPerson, setTo] = useState('');
   const [number, setNumber] = useState('');
   const [title, setTitle] = useState('');
   const [cost, setCost] = useState('');
@@ -43,7 +49,7 @@ const AddInvoice = ({ navigation }) => {
   }
 
   const handleSave = () => {
-    if (!from || !to || !title || !cost || !discount) {
+    if (!fromPerson || !toPerson || !title || !cost || !discount) {
       Alert.alert(
         'Missing Fields',
         'Please fill all required fields.',
@@ -52,15 +58,24 @@ const AddInvoice = ({ navigation }) => {
       );
       return;
     }
-    setDate(getFormattedDate);
-    setTitle('');
-    setTo('');
-    setCost('');
-    setFrom('');
-    setDiscount('');
-    setNumber('');
-    setTotalCost('');
-    navigation.navigate('Main');
+    const currentDate = getFormattedDate();
+    setDate(currentDate);
+
+    
+
+    // Add the invoice data to the database
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO invoices (fromPerson, toPerson, number, title, cost, discount, totalCost, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [fromPerson, toPerson, number, title, cost, discount, totalCost, currentDate],
+        (tx, results) => {
+          console.log('Results', results.rowsAffected);
+          if (results.rowsAffected > 0) {
+           navigation.navigate('Main');
+          } else alert('Registration Failed');
+        }
+      );
+    });
   };
 
   return (
@@ -69,7 +84,7 @@ const AddInvoice = ({ navigation }) => {
         <Text style={styles.inputGroupHeader}>From *</Text>
         <TextInput
           style={styles.input}
-          value={from}
+          value={fromPerson}
           onChangeText={setFrom}
           placeholder='Your name or organization'
           placeholderTextColor={theme.colors.text}
@@ -79,7 +94,7 @@ const AddInvoice = ({ navigation }) => {
         <Text style={styles.inputGroupHeader}>To *</Text>
         <TextInput
           style={styles.input}
-          value={to}
+          value={toPerson}
           onChangeText={setTo}
           placeholder='Recipient name'
           placeholderTextColor={theme.colors.text}
