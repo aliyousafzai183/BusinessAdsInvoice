@@ -9,13 +9,13 @@ import {
 // theme
 import theme from '../themes/AppTheme';
 
-// redux
-import { connect } from 'react-redux';
+// data
+import { openDatabase } from 'react-native-sqlite-storage';
+var db = openDatabase({ name: 'UserDatabase.db' });
 
-const InvoiceComponent = ({ data, navigation, changeId }) => {
+const InvoiceComponent = ({ data, navigation }) => {
 
   const handlePress = () => {
-    changeId(data.id);
     navigation.navigate('View', {
       id: data.id,
       title: data.title,
@@ -28,7 +28,6 @@ const InvoiceComponent = ({ data, navigation, changeId }) => {
       date: data.date
     });
   }
-
 
   return (
     <TouchableOpacity
@@ -46,12 +45,6 @@ const InvoiceComponent = ({ data, navigation, changeId }) => {
     </TouchableOpacity>
   )
 
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeId: (newId) => dispatch({ type: 'SET_ID', payload: { id: newId } }),
-  };
 };
 
 const styles = StyleSheet.create({
@@ -99,4 +92,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default connect(null, mapDispatchToProps)(InvoiceComponent);
+export default InvoiceComponent;

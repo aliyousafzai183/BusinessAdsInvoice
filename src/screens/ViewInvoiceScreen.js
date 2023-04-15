@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -14,6 +14,11 @@ import theme from '../themes/AppTheme';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'UserDatabase.db' });
 
+// icons
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const ViewInvoice = ({ route, navigation }) => {
 
   const [from, setFrom] = useState(route.params.fromPerson);
@@ -23,6 +28,7 @@ const ViewInvoice = ({ route, navigation }) => {
   const [totalCost, setTotalCost] = useState(route.params.totalCost);
   const [number, setNumber] = useState(route.params.number ? route.params.number : "No Mobile Number");
   const [title, setTitle] = useState(route.params.title);
+  const [showMore, setShowMore] = useState(false);
 
   const calculateTotalCost = (cost, discount) => {
     const total = cost - discount;
@@ -35,7 +41,7 @@ const ViewInvoice = ({ route, navigation }) => {
     setTotalCost(total);
   };
 
-  const handleUpdate = () => {
+  const handleUpdatePress = () => {
     db.transaction((tx) => {
       tx.executeSql(
         'UPDATE invoices SET fromPerson=?, toPerson=?, number=?, title=?, cost=?, discount=?, totalCost=? WHERE id=?',
@@ -48,7 +54,37 @@ const ViewInvoice = ({ route, navigation }) => {
         }
       );
     });
-  }
+  };
+
+
+  const handleDeletePress = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'DELETE FROM invoices where id=?',
+        [route.params.id],
+        (tx, results) => {
+          console.log('Results', results.rowsAffected);
+          if (results.rowsAffected > 0) {
+            navigation.navigate('Main');
+          } else {
+            alert('Please insert a valid User Id');
+          }
+        }
+      );
+    });
+  };
+
+  const handlePrintPress = () => {
+    // Handle print button press
+  };
+
+  const handleExportPress = () => {
+    // Handle export button press
+  };
+
+  const handleShowMorePress = () => {
+    setShowMore(!showMore);
+  };
 
   return (
     <View style={styles.container}>
@@ -124,12 +160,27 @@ const ViewInvoice = ({ route, navigation }) => {
         <Text style={styles.inputGroupHeader}>Date</Text>
         <Text style={styles.inputGroupNext}> {route.params.date} </Text>
       </View>
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={handleUpdate}
-      >
-        <Text style={styles.saveButtonText}>UPDATE</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={[styles.updateButton, { width: showMore ? 'auto' : '85%' }]} onPress={handleUpdatePress}>
+          <Text style={styles.buttonText}>Update</Text>
+        </TouchableOpacity>
+        {showMore && (
+          <View style={styles.showMoreContainer}>
+            <TouchableOpacity style={styles.moreButtons} onPress={handleDeletePress}>
+              <Feather name="trash-2" size={20} color={theme.colors.background} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.moreButtons} onPress={handlePrintPress}>
+              <Feather name="printer" size={20} color={theme.colors.background} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.moreButtons} onPress={handleExportPress}>
+              <FontAwesome name="file-pdf-o" size={20} color={theme.colors.background} />
+            </TouchableOpacity>
+          </View>
+        )}
+        <TouchableOpacity style={styles.showMoreButton} onPress={handleShowMorePress}>
+          <MaterialCommunityIcons name="arrow-expand-left" size={20} color={theme.colors.background} />
+        </TouchableOpacity>
+      </View>
     </View>
   )
 };
@@ -210,6 +261,47 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     textAlign: 'center',
+  },
+
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: 'white',
+  },
+  updateButton: {
+    backgroundColor: theme.colors.primary,
+    padding: 10,
+    borderRadius: 5,
+  },
+  showMoreButton: {
+    backgroundColor: theme.colors.primary,
+    padding: 10,
+    borderRadius: 5,
+    width: '13%',
+    alignItems:'center'
+  },
+  moreButtons: {
+    backgroundColor: theme.colors.secondary,
+    padding: 10,
+    borderRadius: 30,
+    backgroundColor: 'orange',
+    marginLeft: '3%',
+
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  showMoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
 
 });

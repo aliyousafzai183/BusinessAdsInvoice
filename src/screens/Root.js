@@ -16,19 +16,9 @@ import InviteScreen from './InviteScreen';
 // theme
 import theme from '../themes/AppTheme';
 
-// icons
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Entypo from 'react-native-vector-icons/Entypo';
-
-// db
+// data
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'UserDatabase.db' });
-
-// redux
-import { connect } from 'react-redux';
-
-// controllers
-import {handleDelete} from '../controller/controller';
 
 const CustomDrawerContent = (props) => {
   return (
@@ -69,7 +59,7 @@ const Main = () => {
 }
 
 const Stack = createNativeStackNavigator();
-const Root = ({id}) => {
+const Root = () => {
 
   useEffect(() => {
     db.transaction(function (txn) {
@@ -130,19 +120,6 @@ const Root = ({id}) => {
           component={ViewInvoice}
           options={{
             headerTitle: 'Update Invoice',
-            headerRight: () => (
-              <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity>
-                  <FontAwesome name='print' size={24} color='white' style={{ marginRight: 16 }} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <FontAwesome name='file-pdf-o' size={24} color='white' style={{ marginRight: 16 }} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { handleDelete(id) }}>
-                  <Entypo name='trash' size={24} color='white' />
-                </TouchableOpacity>
-              </View>
-            ),
           }}
         />
         <Stack.Screen
@@ -154,10 +131,6 @@ const Root = ({id}) => {
     </NavigationContainer>
   )
 };
-
-const mapStateToProps = (state) => ({
-  id: state.id
-});
 
 const styles = StyleSheet.create({
   drawerHeader: {
@@ -173,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps, null)(Root);
+export default Root;
