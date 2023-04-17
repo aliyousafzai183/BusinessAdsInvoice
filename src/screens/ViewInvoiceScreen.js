@@ -5,6 +5,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Keyboard
 } from 'react-native';
 
 // theme
@@ -39,6 +40,16 @@ const ViewInvoice = ({ route, navigation }) => {
     const total = calculateTotalCost(cost, value);
     setDiscount(value);
     setTotalCost(total);
+  };
+
+  const handleDiscountChangeOnCost = (value) => {
+    const total = calculateTotalCost(value, discount);
+    setCost(value);
+    setTotalCost(total);
+  };
+
+  const handleMinimizeKeyboard = () => {
+    Keyboard.dismiss();
   };
 
   const handleUpdatePress = () => {
@@ -134,7 +145,7 @@ const ViewInvoice = ({ route, navigation }) => {
         <TextInput
           style={styles.input}
           value={cost.toString()}
-          onChangeText={setCost}
+          onChangeText={handleDiscountChangeOnCost}
           placeholder='Total cost before discount'
           placeholderTextColor={theme.colors.text}
           keyboardType='numeric'
@@ -161,7 +172,7 @@ const ViewInvoice = ({ route, navigation }) => {
         <Text style={styles.inputGroupNext}> {route.params.date} </Text>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.updateButton, { width: showMore ? 'auto' : '85%' }]} onPress={handleUpdatePress}>
+        <TouchableOpacity style={[styles.updateButton, { width: showMore ? 'auto' : '70%' }]} onPress={handleUpdatePress}>
           <Text style={styles.buttonText}>Update</Text>
         </TouchableOpacity>
         {showMore && (
@@ -178,7 +189,10 @@ const ViewInvoice = ({ route, navigation }) => {
           </View>
         )}
         <TouchableOpacity style={styles.showMoreButton} onPress={handleShowMorePress}>
-          <MaterialCommunityIcons name="arrow-expand-left" size={20} color={theme.colors.background} />
+          <MaterialCommunityIcons name={showMore? "arrow-expand-right" :"arrow-expand-left"} size={20} color={theme.colors.background} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.showMoreButton} onPress={handleMinimizeKeyboard}>
+          <MaterialCommunityIcons name="keyboard-off-outline" size={20} color={theme.colors.background} />
         </TouchableOpacity>
       </View>
     </View>

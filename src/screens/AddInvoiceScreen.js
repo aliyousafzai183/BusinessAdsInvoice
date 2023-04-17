@@ -5,17 +5,19 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Alert
+  Alert,
+  Keyboard,
 } from 'react-native';
 
 // db
-// import db from '../model/openDb';
 import { openDatabase } from 'react-native-sqlite-storage';
-
 var db = openDatabase({ name: 'UserDatabase.db' });
 
 // theme
 import theme from '../themes/AppTheme';
+
+// icons
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AddInvoice = ({ navigation }) => {
   const [fromPerson, setFrom] = useState('');
@@ -48,6 +50,10 @@ const AddInvoice = ({ navigation }) => {
     return `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month}-${year}`;
   }
 
+  const handleMinimizeKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   const handleSave = () => {
     if (!fromPerson || !toPerson || !title || !cost || !discount) {
       Alert.alert(
@@ -67,7 +73,7 @@ const AddInvoice = ({ navigation }) => {
     db.transaction(function (tx) {
       tx.executeSql(
         'INSERT INTO invoices (fromPerson, toPerson, number, title, cost, discount, totalCost, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [fromPerson, toPerson, number, title, cost, discount, totalCost, currentDate],
+        [fromPerson, toPerson, number, title, cost, discount, totalCost, date],
         (tx, results) => {
           console.log('Results', results.rowsAffected);
           if (results.rowsAffected > 0) {
@@ -154,12 +160,14 @@ const AddInvoice = ({ navigation }) => {
           editable={false} // disable editing
         />
       </View>
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={handleSave}
-      >
-        <Text style={styles.saveButtonText}>SAVE</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={[styles.saveButton, { width: '83%' }]} onPress={handleSave}>
+          <Text style={styles.buttonText}>SAVE</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.showMoreButton} onPress={handleMinimizeKeyboard}>
+          <MaterialCommunityIcons name="keyboard-off-outline" size={20} color={theme.colors.background} />
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -202,29 +210,38 @@ const styles = StyleSheet.create({
     color: theme.colors.text
   },
 
-  saveButton: {
-    backgroundColor: theme.colors.primary,
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    alignSelf: 'stretch',
+  buttonContainer: {
     position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: 'white',
   },
 
   saveButtonText: {
     color: '#fff',
     fontSize: 16,
+    textAlign: 'center',
+  },
+
+  saveButton: {
+    backgroundColor: theme.colors.primary,
+    padding: 10,
+    borderRadius: 5,
+  },
+  showMoreButton: {
+    backgroundColor: theme.colors.primary,
+    padding: 10,
+    borderRadius: 5,
+    width: '13%',
+    alignItems:'center'
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
 
