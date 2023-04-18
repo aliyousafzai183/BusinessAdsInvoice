@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Keyboard,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 // theme
@@ -54,6 +54,7 @@ const ViewInvoice = ({ route, navigation }) => {
   };
 
   const handleUpdatePress = () => {
+    handleMinimizeKeyboard();
     db.transaction((tx) => {
       tx.executeSql(
         'UPDATE invoices SET fromPerson=?, toPerson=?, number=?, title=?, cost=?, discount=?, totalCost=? WHERE id=?',

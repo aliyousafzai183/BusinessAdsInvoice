@@ -4,10 +4,10 @@ import {
   TextInput,
   StyleSheet,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-
 
 // theme
 import theme from '../themes/AppTheme';
@@ -22,6 +22,7 @@ var db = openDatabase({ name: 'UserDatabase.db' });
 // icons
 import Feather from 'react-native-vector-icons/Feather';
 
+const { width, height } = Dimensions.get('window');
 
 // function
 const InvoiceList = ({ navigation }) => {
@@ -74,13 +75,19 @@ const InvoiceList = ({ navigation }) => {
     navigation.navigate('Add');
   }
 
+  const { width, height } = Dimensions.get('window');
+  const searchBarWidth = width - 40;
+  const addButtonSize = height * 0.08;
+  const addButtonBottom = height * 0.05;
+  const addButtonRight = width * 0.05;
+
   return (
     <View style={styles.container}>
       <TextInput
         value={searchText}
         placeholder='Search by name'
         placeholderTextColor={theme.colors.headerText}
-        style={styles.search}
+        style={[styles.search, { width: searchBarWidth }]}
         onChangeText={handleSearch}
       />
 
@@ -92,7 +99,15 @@ const InvoiceList = ({ navigation }) => {
       />
 
       <TouchableOpacity
-        style={styles.addButton}
+        style={[
+          styles.addButton,
+          {
+            width: addButtonSize,
+            height: addButtonSize,
+            bottom: addButtonBottom,
+            right: addButtonRight
+          }
+        ]}
         onPress={handleNewInvoice}
       >
         <Feather name="plus" size={30} color={theme.colors.background} />
@@ -101,18 +116,21 @@ const InvoiceList = ({ navigation }) => {
   )
 }
 
+export default InvoiceList;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: '2%'
+    paddingVertical: height*0.02,
+    paddingHorizontal: width*0.02,
+    
   },
-
   search: {
-    paddingHorizontal: 25,
+    paddingHorizontal: width * 0.05,
     backgroundColor: theme.colors.secondary,
-    borderRadius: 20,
+    borderRadius: height * 0.04,
     color: theme.colors.headerText,
-    marginBottom: '3%',
+    marginBottom: height * 0.03,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -122,19 +140,17 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-
   list: {
-    marginBottom: 60
+    marginBottom: height * 0.1,
   },
-
   addButton: {
     position: 'absolute',
-    bottom: 20,
-    right: 20,
+    bottom: height * 0.05,
+    right: width * 0.05,
     backgroundColor: theme.colors.primary,
-    borderRadius: 50,
-    width: 60,
-    height: 60,
+    borderRadius: height * 0.1,
+    width: height * 0.1,
+    height: height * 0.1,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -146,11 +162,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-
   addButtonText: {
-    fontSize: 30,
+    fontSize: height * 0.05,
     fontWeight: 'bold',
-  }
-})
-
-export default InvoiceList;
+  },
+});

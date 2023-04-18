@@ -28,8 +28,6 @@ const AddInvoice = ({ navigation }) => {
   const [cost, setCost] = useState('');
   const [discount, setDiscount] = useState('');
   const [totalCost, setTotalCost] = useState('');
-  const [date, setDate] = useState();
-
 
   const calculateTotalCost = (cost, discount) => {
     const total = cost - discount;
@@ -55,35 +53,45 @@ const AddInvoice = ({ navigation }) => {
     Keyboard.dismiss();
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!fromPerson || !toPerson || !title || !cost || !discount) {
       Alert.alert(
-        'Missing Fields',
-        'Please fill all required fields.',
-        [{ text: 'OK', style: 'cancel' }],
-        { cancelable: true }
+        'Not Saved',
+        'Provide all required fields to save the invoice',
+        [
+          { text: 'OK', onPress: () => console.log('OK Pressed') }
+        ],
+        { cancelable: false }
       );
       return;
     }
-    const currentDate = getFormattedDate();
-    setDate(currentDate);
 
-
+    handleMinimizeKeyboard();
+    const formattedDate = getFormattedDate();
+    console.log(formattedDate);
 
     // Add the invoice data to the database
-    db.transaction(function (tx) {
+    await db.transaction((tx) => {
       tx.executeSql(
         'INSERT INTO invoices (fromPerson, toPerson, number, title, cost, discount, totalCost, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [fromPerson, toPerson, number, title, cost, discount, totalCost, date],
+        [fromPerson, toPerson, number, title, cost, discount, totalCost, formattedDate],
         (tx, results) => {
           console.log('Results', results.rowsAffected);
           if (results.rowsAffected > 0) {
+            setFrom('');
+            setTo('');
+            setNumber('');
+            setTitle('');
+            setCost('');
+            setDiscount('');
+            setTotalCost('');
             navigation.navigate('Main');
           } else alert('Registration Failed');
         }
       );
     });
   };
+
 
   return (
     <TouchableWithoutFeedback onPress={handleMinimizeKeyboard}>
