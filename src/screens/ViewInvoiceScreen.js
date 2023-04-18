@@ -100,7 +100,7 @@ const ViewInvoice = ({ route, navigation }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handleMinimizeKeyboard}>
+    <TouchableWithoutFeedback onPress={handleMinimizeKeyboard} style={styles.top}>
 
       <View style={styles.container}>
         <View style={styles.inputGroup}>
@@ -218,6 +218,11 @@ const ViewInvoice = ({ route, navigation }) => {
 
 
 const styles = StyleSheet.create({
+
+  top:{
+    width:'100%',
+  },
+
   container: {
     flex: 1,
     paddingHorizontal: 20,
