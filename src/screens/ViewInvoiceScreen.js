@@ -5,7 +5,8 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Keyboard
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 // theme
@@ -98,6 +99,8 @@ const ViewInvoice = ({ route, navigation }) => {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={handleMinimizeKeyboard}>
+
     <View style={styles.container}>
       <View style={styles.inputGroup}>
         <Text style={styles.inputGroupHeader}>From</Text>
@@ -196,6 +199,7 @@ const ViewInvoice = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   )
 };
 

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 // db
@@ -85,6 +86,7 @@ const AddInvoice = ({ navigation }) => {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={handleMinimizeKeyboard}>
     <View style={styles.container}>
       <View style={styles.inputGroup}>
         <Text style={styles.inputGroupHeader}>From *</Text>
@@ -169,6 +171,7 @@ const AddInvoice = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   )
 }
 
