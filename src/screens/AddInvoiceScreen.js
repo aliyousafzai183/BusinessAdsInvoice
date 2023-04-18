@@ -68,7 +68,7 @@ const AddInvoice = ({ navigation }) => {
     const currentDate = getFormattedDate();
     setDate(currentDate);
 
-    
+
 
     // Add the invoice data to the database
     db.transaction(function (tx) {
@@ -78,7 +78,7 @@ const AddInvoice = ({ navigation }) => {
         (tx, results) => {
           console.log('Results', results.rowsAffected);
           if (results.rowsAffected > 0) {
-           navigation.navigate('Main');
+            navigation.navigate('Main');
           } else alert('Registration Failed');
         }
       );
@@ -87,90 +87,102 @@ const AddInvoice = ({ navigation }) => {
 
   return (
     <TouchableWithoutFeedback onPress={handleMinimizeKeyboard}>
-    <View style={styles.container}>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>From *</Text>
-        <TextInput
-          style={styles.input}
-          value={fromPerson}
-          onChangeText={setFrom}
-          placeholder='Your name or organization'
-          placeholderTextColor={theme.colors.text}
-        />
+      <View style={styles.container}>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>From *</Text>
+          <TextInput
+            style={styles.input}
+            value={fromPerson}
+            onChangeText={setFrom}
+            placeholder='Your name or organization'
+            placeholderTextColor={theme.colors.text}
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>To *</Text>
+          <TextInput
+            style={styles.input}
+            value={toPerson}
+            onChangeText={setTo}
+            placeholder='Recipient name'
+            placeholderTextColor={theme.colors.text}
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Mobile</Text>
+          <TextInput
+            style={styles.input}
+            value={number}
+            onChangeText={setNumber}
+            placeholder='Recipient mobile number'
+            placeholderTextColor={theme.colors.text}
+            keyboardType='numeric'
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Title *</Text>
+          <TextInput
+            style={styles.input}
+            value={title}
+            onChangeText={setTitle}
+            placeholder='Invoice title'
+            placeholderTextColor={theme.colors.text}
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Cost *</Text>
+          <TextInput
+            style={styles.input}
+            value={cost}
+            onChangeText={setCost}
+            placeholder='Total cost before discount'
+            placeholderTextColor={theme.colors.text}
+            keyboardType='numeric'
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Discount *</Text>
+          <TextInput
+            style={styles.input}
+            value={discount}
+            onChangeText={handleDiscountChange}
+            placeholder='Discount amount'
+            placeholderTextColor={theme.colors.text}
+            keyboardType='numeric'
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Total Cost</Text>
+          <TextInput
+            style={styles.input}
+            value={totalCost}
+            placeholder='Total cost after discount'
+            placeholderTextColor={theme.colors.text}
+            keyboardType='numeric'
+            editable={false} // disable editing
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={[styles.saveButton, { width: '83%' }]} onPress={handleSave}>
+            <Text style={styles.buttonText}>SAVE</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.showMoreButton} onPress={handleMinimizeKeyboard}>
+            <MaterialCommunityIcons name="keyboard-off-outline" size={20} color={theme.colors.background} />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>To *</Text>
-        <TextInput
-          style={styles.input}
-          value={toPerson}
-          onChangeText={setTo}
-          placeholder='Recipient name'
-          placeholderTextColor={theme.colors.text}
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Mobile</Text>
-        <TextInput
-          style={styles.input}
-          value={number}
-          onChangeText={setNumber}
-          placeholder='Recipient mobile number'
-          placeholderTextColor={theme.colors.text}
-          keyboardType='numeric'
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Title *</Text>
-        <TextInput
-          style={styles.input}
-          value={title}
-          onChangeText={setTitle}
-          placeholder='Invoice title'
-          placeholderTextColor={theme.colors.text}
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Cost *</Text>
-        <TextInput
-          style={styles.input}
-          value={cost}
-          onChangeText={setCost}
-          placeholder='Total cost before discount'
-          placeholderTextColor={theme.colors.text}
-          keyboardType='numeric'
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Discount *</Text>
-        <TextInput
-          style={styles.input}
-          value={discount}
-          onChangeText={handleDiscountChange}
-          placeholder='Discount amount'
-          placeholderTextColor={theme.colors.text}
-          keyboardType='numeric'
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Total Cost</Text>
-        <TextInput
-          style={styles.input}
-          value={totalCost}
-          placeholder='Total cost after discount'
-          placeholderTextColor={theme.colors.text}
-          keyboardType='numeric'
-          editable={false} // disable editing
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.saveButton, { width: '83%' }]} onPress={handleSave}>
-          <Text style={styles.buttonText}>SAVE</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.showMoreButton} onPress={handleMinimizeKeyboard}>
-          <MaterialCommunityIcons name="keyboard-off-outline" size={20} color={theme.colors.background} />
-        </TouchableOpacity>
-      </View>
-    </View>
     </TouchableWithoutFeedback>
   )
 }
@@ -240,7 +252,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     width: '13%',
-    alignItems:'center'
+    alignItems: 'center'
   },
   buttonText: {
     color: 'white',

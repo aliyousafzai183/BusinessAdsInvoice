@@ -101,104 +101,116 @@ const ViewInvoice = ({ route, navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={handleMinimizeKeyboard}>
 
-    <View style={styles.container}>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>From</Text>
-        <TextInput
-          style={styles.input}
-          value={from}
-          onChangeText={setFrom}
-          placeholder='Your name or organization'
-          placeholderTextColor={theme.colors.text}
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>To</Text>
-        <TextInput
-          style={styles.input}
-          value={to}
-          onChangeText={setTo}
-          placeholder='Recipient name or organization'
-          placeholderTextColor={theme.colors.text}
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Mobile</Text>
-        <TextInput
-          style={styles.input}
-          value={number}
-          onChangeText={setNumber}
-          placeholder='Recipient mobile number'
-          placeholderTextColor={theme.colors.text}
-          keyboardType='numeric'
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Title</Text>
-        <TextInput
-          style={styles.input}
-          value={title}
-          onChangeText={setTitle}
-          placeholder='Invoice title'
-          placeholderTextColor={theme.colors.text}
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Cost</Text>
-        <TextInput
-          style={styles.input}
-          value={cost.toString()}
-          onChangeText={handleDiscountChangeOnCost}
-          placeholder='Total cost before discount'
-          placeholderTextColor={theme.colors.text}
-          keyboardType='numeric'
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Discount</Text>
-        <TextInput
-          style={styles.input}
-          value={discount.toString()}
-          onChangeText={handleDiscountChange}
-          placeholder='Discount amount'
-          placeholderTextColor={theme.colors.text}
-          keyboardType='numeric'
-        />
-      </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Total Cost</Text>
-        <Text style={styles.inputGroupNext}> {totalCost} </Text>
+      <View style={styles.container}>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>From</Text>
+          <TextInput
+            style={styles.input}
+            value={from}
+            onChangeText={setFrom}
+            placeholder='Your name or organization'
+            placeholderTextColor={theme.colors.text}
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>To</Text>
+          <TextInput
+            style={styles.input}
+            value={to}
+            onChangeText={setTo}
+            placeholder='Recipient name or organization'
+            placeholderTextColor={theme.colors.text}
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Mobile</Text>
+          <TextInput
+            style={styles.input}
+            value={number}
+            onChangeText={setNumber}
+            placeholder='Recipient mobile number'
+            placeholderTextColor={theme.colors.text}
+            keyboardType='numeric'
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Title</Text>
+          <TextInput
+            style={styles.input}
+            value={title}
+            onChangeText={setTitle}
+            placeholder='Invoice title'
+            placeholderTextColor={theme.colors.text}
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Cost</Text>
+          <TextInput
+            style={styles.input}
+            value={cost.toString()}
+            onChangeText={handleDiscountChangeOnCost}
+            placeholder='Total cost before discount'
+            placeholderTextColor={theme.colors.text}
+            keyboardType='numeric'
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Discount</Text>
+          <TextInput
+            style={styles.input}
+            value={discount.toString()}
+            onChangeText={handleDiscountChange}
+            placeholder='Discount amount'
+            placeholderTextColor={theme.colors.text}
+            keyboardType='numeric'
+            returnKeyType="done"
+            onSubmitEditing={handleMinimizeKeyboard}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Total Cost</Text>
+          <Text style={styles.inputGroupNext}> {totalCost} </Text>
 
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputGroupHeader}>Date</Text>
+          <Text style={styles.inputGroupNext}> {route.params.date} </Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={[styles.updateButton, { width: showMore ? 'auto' : '70%' }]} onPress={handleUpdatePress}>
+            <Text style={styles.buttonText}>Update</Text>
+          </TouchableOpacity>
+          {showMore && (
+            <View style={styles.showMoreContainer}>
+              <TouchableOpacity style={styles.moreButtons} onPress={handleDeletePress}>
+                <Feather name="trash-2" size={20} color={theme.colors.background} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.moreButtons} onPress={handlePrintPress}>
+                <Feather name="printer" size={20} color={theme.colors.background} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.moreButtons} onPress={handleExportPress}>
+                <FontAwesome name="file-pdf-o" size={20} color={theme.colors.background} />
+              </TouchableOpacity>
+            </View>
+          )}
+          <TouchableOpacity style={styles.showMoreButton} onPress={handleShowMorePress}>
+            <MaterialCommunityIcons name={showMore ? "arrow-expand-right" : "arrow-expand-left"} size={20} color={theme.colors.background} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.showMoreButton} onPress={handleMinimizeKeyboard}>
+            <MaterialCommunityIcons name="keyboard-off-outline" size={20} color={theme.colors.background} />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputGroupHeader}>Date</Text>
-        <Text style={styles.inputGroupNext}> {route.params.date} </Text>
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.updateButton, { width: showMore ? 'auto' : '70%' }]} onPress={handleUpdatePress}>
-          <Text style={styles.buttonText}>Update</Text>
-        </TouchableOpacity>
-        {showMore && (
-          <View style={styles.showMoreContainer}>
-            <TouchableOpacity style={styles.moreButtons} onPress={handleDeletePress}>
-              <Feather name="trash-2" size={20} color={theme.colors.background} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.moreButtons} onPress={handlePrintPress}>
-              <Feather name="printer" size={20} color={theme.colors.background} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.moreButtons} onPress={handleExportPress}>
-              <FontAwesome name="file-pdf-o" size={20} color={theme.colors.background} />
-            </TouchableOpacity>
-          </View>
-        )}
-        <TouchableOpacity style={styles.showMoreButton} onPress={handleShowMorePress}>
-          <MaterialCommunityIcons name={showMore? "arrow-expand-right" :"arrow-expand-left"} size={20} color={theme.colors.background} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.showMoreButton} onPress={handleMinimizeKeyboard}>
-          <MaterialCommunityIcons name="keyboard-off-outline" size={20} color={theme.colors.background} />
-        </TouchableOpacity>
-      </View>
-    </View>
     </TouchableWithoutFeedback>
   )
 };
@@ -301,7 +313,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     width: '13%',
-    alignItems:'center'
+    alignItems: 'center'
   },
   moreButtons: {
     backgroundColor: theme.colors.secondary,
