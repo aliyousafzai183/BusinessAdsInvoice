@@ -120,9 +120,10 @@ export default InvoiceList;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     paddingVertical: height*0.02,
     paddingHorizontal: width*0.02,
+    width: '100%',
     
   },
   search: {
